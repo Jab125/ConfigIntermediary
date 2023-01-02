@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "config-intermediary-owo-config",
+  "version": "${version}",
+  "name": "CI oωo Config",
+  "description": "",
+  "authors": [
+    "Jab125"
+  ],
+  "contact": {
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/config-intermediary-owo-config/icon.png",
+  "environment": "*",
+  "mixins": [
+    "config-intermediary-owo-config.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+  },
+  "custom": {
+    "config-intermediary:compat": [
+      "owo-config"
+    ]
+  }
+}

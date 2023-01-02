@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "config-intermediary-configured",
+  "version": "${version}",
+  "name": "CI Configured",
+  "description": "",
+  "authors": [
+    "Jab125"
+  ],
+  "contact": {
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/config-intermediary-configured/icon.png",
+  "environment": "*",
+  "_accessWidener": "configintermediary.accesswidener",
+  "entrypoints": {
+    "main": [
+      "com.jab125.configintermediary.compat.IntermediaryIntegration"
+    ],
+    "config-intermediary:registration": [
+      "com.jab125.configintermediary.compat.IntermediaryIntegration"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+  },
+  "custom": {
+    "config-intermediary:compat": [
+      "configured"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+archivesBaseName = "config-intermediary-configured"
+repositories {
+    maven { url = "https://cursemaven.com/"}
+}
+dependencies {
+    modImplementation "curse.maven:configured-667378:4166864"
+}

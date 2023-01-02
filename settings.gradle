@@ -1,0 +1,16 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
+
+include "modmenu"
+include "auto-config"
+include "modTestmod"
+include "owo-config"
+include "configured"
+include "base"

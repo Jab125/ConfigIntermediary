@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "config-intermediary-autoconfig",
+  "version": "${version}",
+  "name": "CI Auto Config",
+  "description": "",
+  "authors": [
+    "Jab125"
+  ],
+  "contact": {
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/config-intermediary-auto-config/icon.png",
+  "environment": "*",
+  "mixins": [
+    "config-intermediary-auto-config.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+  },
+  "custom": {
+    "config-intermediary:compat": [
+      "auto-config"
+    ]
+  }
+}

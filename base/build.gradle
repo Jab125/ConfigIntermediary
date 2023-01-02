@@ -1,0 +1,4 @@
+archivesBaseName = "config-intermediary-base"
+
+dependencies {
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "config-intermediary-test-mod",
+  "version": "1.0.0",
+  "name": "Config Intermediary Test Mod",
+  "description": "",
+  "authors": [
+    "Jab125"
+  ],
+  "contact": {
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/config-intermediary-test-mod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jab125.configintermediary.test.ConfigIntermediaryTestMod"
+    ],
+    "client": [
+      "com.jab125.configintermediary.test.client.ConfigIntermediaryClient"
+    ],
+    "_modmenu": [
+      "com.jab125.configintermediary.test.compat.ModMenuCompat"
+    ],
+    "config-intermediary:registration": [
+      "com.jab125.configintermediary.test.ConfigRegistration"
+    ]
+  },
+  "mixins": [
+    "config-intermediary-testmod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+  }
+}

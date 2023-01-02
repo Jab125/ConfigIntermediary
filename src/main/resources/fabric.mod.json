@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "config-intermediary",
+  "version": "${version}",
+  "name": "Config Intermediary",
+  "description": "",
+  "authors": [
+    "Jab125"
+  ],
+  "provides": [
+    "config-intermediary-auto-config-compat"
+  ],
+  "contact": {
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/config-intermediary/icon.png",
+  "environment": "*",
+  "_accessWidener": "configintermediary.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+  }
+}

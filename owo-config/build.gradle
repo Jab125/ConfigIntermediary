@@ -1,0 +1,8 @@
+archivesBaseName = "config-intermediary-owo-config"
+repositories {
+    maven { url 'https://maven.wispforest.io' }
+}
+
+dependencies {
+    modImplementation "io.wispforest:owo-lib:0.9.3+1.19"
+}

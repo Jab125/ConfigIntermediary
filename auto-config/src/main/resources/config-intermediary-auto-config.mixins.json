@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.jab125.configintermediary.mixin.autoconfig",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AutoConfigMixin",
+    "ConfigManagerAccessor"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

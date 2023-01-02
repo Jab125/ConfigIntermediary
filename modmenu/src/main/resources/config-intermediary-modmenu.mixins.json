@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.jab125.configintermediary.mixin.modmenu",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ModMenuConfigMixin",
+    "ModMenuDataAccessor",
+    "FabricModMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "EnumConfigOptionAccessor"
+  ]
+}

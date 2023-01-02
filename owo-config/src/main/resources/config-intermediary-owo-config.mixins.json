@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.jab125.configintermediary.mixin.owoconfig",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ConfigWrapperAccessor",
+    "ConfigWrapperMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
