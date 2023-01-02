@@ -12,7 +12,6 @@
   "license": "Apache-2.0",
   "icon": "assets/config-intermediary-base/icon.png",
   "environment": "*",
-  "_accessWidener": "configintermediary.accesswidener",
   "entrypoints": {
     "main": [
       "com.jab125.configintermediary.ConfigIntermediary"
