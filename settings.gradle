@@ -8,6 +8,8 @@ pluginManagement {
     }
 }
 
+rootProject.name = "config-intermediary"
+
 include "modmenu"
 include "auto-config"
 include "modTestmod"
