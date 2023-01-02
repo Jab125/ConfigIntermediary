@@ -23,9 +23,15 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Compatibility with Auto Config (included by Cloth Config)
+ */
 @ApiStatus.Internal
 public class AutoConfigCompat {
-    private static final ConfigValue TRANSISTIVE = new ConfigValue() {
+    /**
+     * Placeholder for transitive values.
+     */
+    private static final ConfigValue TRANSITIVE = new ConfigValue() {
         @Override
         public Object get() {
             return null;
@@ -53,6 +59,10 @@ public class AutoConfigCompat {
     };
     public static Logger LOGGER = LoggerFactory.getLogger("config-intermediary-auto-config-compat");
 
+    /**
+     * @param data The config
+     * @return A {@link Config} object with all the config values the config contains.
+     */
     @SuppressWarnings("UnstableApiUsage")
     public static Config register(ConfigHolder<?> data) {
         if (data instanceof ConfigManager<?> configManager && configManager instanceof ConfigManagerAccessor accessor) {
@@ -100,12 +110,12 @@ public class AutoConfigCompat {
             }
 
             @Override
-            void onSave(SaveEvent saveEvent) {
+            public void onSave(SaveEvent saveEvent) {
                 configManager.registerSaveListener((configHolder, configData) -> saveEvent.onSave(getFutureConfig(), configData));
             }
 
             @Override
-            void onLoad(LoadEvent loadEvent) {
+            public void onLoad(LoadEvent loadEvent) {
                 configManager.registerLoadListener(((configHolder, configData) -> loadEvent.onLoad(getFutureConfig(), configData)));
             }
 
@@ -115,14 +125,14 @@ public class AutoConfigCompat {
             }
 
             @Override
-            String getId() {
+            public String getId() {
                 return modId;
             }
         });
         for (Field field : defaultObject.getClass().getFields()) {
             if (Modifier.isStatic(field.getModifiers())) continue;
             var l = createConfigValue(ReflectionUtils.get(defaultObject, field), isTransitive(field), field.getType(), () -> ReflectionUtils.get(config, field), (s) -> ReflectionUtils.set(config, s, field));
-            if (l == TRANSISTIVE) {
+            if (l == TRANSITIVE) {
                 l = createNestedObjectBased(field.getName(), field.getType(), config);
             }
             builder.set(field.getName(), l);
@@ -169,12 +179,12 @@ public class AutoConfigCompat {
             }
 
             @Override
-            void onSave(SaveEvent saveEvent) {
+            public void onSave(SaveEvent saveEvent) {
                 configManager.registerSaveListener((configHolder, configData) -> saveEvent.onSave(getFutureConfig(), configData));
             }
 
             @Override
-            void onLoad(LoadEvent loadEvent) {
+            public void onLoad(LoadEvent loadEvent) {
                 configManager.registerLoadListener(((configHolder, configData) -> loadEvent.onLoad(getFutureConfig(), configData)));
             }
 
@@ -184,14 +194,14 @@ public class AutoConfigCompat {
             }
 
             @Override
-            String getId() {
+            public String getId() {
                 return modId;
             }
         });
         for (Field field : config.getClass().getFields()) {
             if (Modifier.isStatic(field.getModifiers())) continue;
             var l = createConfigValue(isTransitive(field), field.getType(), () -> ReflectionUtils.get(config, field), (s) -> ReflectionUtils.set(config, s, field));
-            if (l == TRANSISTIVE) {
+            if (l == TRANSITIVE) {
                 l = createNestedObjectBased(field.getName(), field.getType(), config);
             }
             builder.set(field.getName(), l);
@@ -317,7 +327,7 @@ public class AutoConfigCompat {
                 };
             }
         } else {
-            return TRANSISTIVE;
+            return TRANSITIVE;
         }
     }
 
@@ -440,7 +450,7 @@ public class AutoConfigCompat {
                 };
             }
         } else {
-            return TRANSISTIVE;
+            return TRANSITIVE;
         }
     }
 
@@ -492,7 +502,7 @@ public class AutoConfigCompat {
         for (Field field : builder.delegate.get().getClass().getFields()) {
             if (Modifier.isStatic(field.getModifiers())) continue;
             var l = createConfigValue(isTransitive(field), field.getType(), () -> ReflectionUtils.get(builder.delegate.get(), field), (s) -> ReflectionUtils.set(builder.delegate.get(), s, field));
-            if (l == TRANSISTIVE) {
+            if (l == TRANSITIVE) {
                 l = createNestedObjectBased(field.getName(), field.getType(), builder.delegate.get());
             }
             builder.set(field.getName(), l);
