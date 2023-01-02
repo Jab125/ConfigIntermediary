@@ -1,4 +1,4 @@
-package com.jab125.configintermediary.compat;
+package com.jab125.configintermediary.compat.integration;
 
 import com.google.common.collect.ImmutableMap;
 import com.jab125.configintermediary.ConfigIntermediary;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class IntermediaryIntegration implements ModInitializer, ConfigRegistration {
-    private Map<String, Set<IModConfig>> configs = new HashMap<>();
+    private static final Map<String, Set<IModConfig>> configs = new HashMap<>();
     @Override
     public void onConfigRegistered(Config config) {
         configs.put(config.getId(), Set.of(new IntermediaryConfig(config)));

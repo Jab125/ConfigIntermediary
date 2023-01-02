@@ -12,12 +12,19 @@ import java.nio.file.Path;
 import java.util.Set;
 import java.util.function.Consumer;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class IntermediaryConfig implements IModConfig {
     private final Config config;
+    private final String id;
 
     public IntermediaryConfig(Config config) {
         this.config = config;
+        this.id = config.getId();
+    }
+
+    @SuppressWarnings("unused")
+    public IntermediaryConfig(Config config, String id) {
+        this.config = config;
+        this.id = id;
     }
 
     @Override
@@ -60,7 +67,7 @@ public class IntermediaryConfig implements IModConfig {
 
     @Override
     public String getModId() {
-        return config.getId();
+        return id;
     }
 
     @Override

@@ -14,10 +14,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.jab125.configintermediary.compat.IntermediaryIntegration"
+      "com.jab125.configintermediary.compat.integration.IntermediaryIntegration"
     ],
     "config-intermediary:registration": [
-      "com.jab125.configintermediary.compat.IntermediaryIntegration"
+      "com.jab125.configintermediary.compat.integration.IntermediaryIntegration"
     ]
   },
   "mixins": [
