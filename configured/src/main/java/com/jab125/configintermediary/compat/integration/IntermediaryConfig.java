@@ -54,7 +54,12 @@ public class IntermediaryConfig implements IModConfig {
 
     @Override
     public boolean isChanged() {
-        return !ConfigHelper.gatherAllConfigValues(this).stream().anyMatch(a -> a.get().equals(a.getDefault()));
+        return ConfigHelper.gatherAllConfigValues(this).stream().anyMatch(a -> {
+            if (a instanceof IntermediaryValue<?> intermediaryValue) {
+                return !(intermediaryValue.configValue.get().equals(intermediaryValue.configValue.getDefaultValue()));
+            }
+            return false;
+        });
     }
 
     @Override
@@ -75,6 +80,7 @@ public class IntermediaryConfig implements IModConfig {
                 intermediaryValue.apply();
             }
         }
+        config.save();
     }
 
     @Override
