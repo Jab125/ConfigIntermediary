@@ -95,17 +95,17 @@ public class TransitiveConfigValueBuilder {
 
         public abstract void load();
 
-        abstract void onLoad(LoadEvent loadEvent);
+        public abstract void onLoad(LoadEvent loadEvent);
 
-        abstract void onSave(SaveEvent saveEvent);
+        public abstract void onSave(SaveEvent saveEvent);
 
         protected Config getFutureConfig() {
             return futureConfig;
         }
 
-        abstract String getId();
+        public abstract String getId();
 
-        void resetConfig() {
+        public void resetConfig() {
             set(getAsDefault());
         }
     }
