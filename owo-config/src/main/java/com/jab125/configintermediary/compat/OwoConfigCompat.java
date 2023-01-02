@@ -60,17 +60,17 @@ public class OwoConfigCompat {
             }
 
             @Override
-            void onLoad(LoadEvent loadEvent) {
+            public void onLoad(LoadEvent loadEvent) {
                 // TODO
             }
 
             @Override
-            void onSave(SaveEvent saveEvent) {
+            public void onSave(SaveEvent saveEvent) {
                 // TODO
             }
 
             @Override
-            String getId() {
+            public String getId() {
                 return wrapper.name();
             }
 
