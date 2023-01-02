@@ -1,7 +1,6 @@
 package com.jab125.configintermediary.compat.integration;
 
 import com.jab125.configintermediary.api.value.Config;
-import com.jab125.configintermediary.api.value.ConfigValue;
 import com.mrcrayfish.configured.api.ConfigType;
 import com.mrcrayfish.configured.api.IConfigEntry;
 import com.mrcrayfish.configured.api.IConfigValue;
@@ -9,17 +8,14 @@ import com.mrcrayfish.configured.api.IModConfig;
 import com.mrcrayfish.configured.util.ConfigHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class IntermediaryConfig implements IModConfig {
     private final Config config;
 
-    //private final List<>
     public IntermediaryConfig(Config config) {
         this.config = config;
     }
@@ -68,7 +64,7 @@ public class IntermediaryConfig implements IModConfig {
     }
 
     @Override
-    public void loadWorldConfig(Path path, Consumer<IModConfig> consumer) throws IOException {
+    public void loadWorldConfig(Path path, Consumer<IModConfig> consumer) {
         // no
     }
 
