@@ -152,6 +152,7 @@ dependencies {
 dependencies {
     afterEvaluate {
         subprojects.each {
+            if (it.name == "modTestmod") return ;
             api project(path: "${it.path}", configuration: "namedElements")
             System.out.println(it.archivesBaseName)
             if (!it.archivesBaseName.toLowerCase(Locale.US).contains("test")) {
@@ -215,4 +216,14 @@ publishing {
     }
 
     setupRepositories(repositories)
+}
+
+allprojects {
+    if (it.name == "modTestmod") {
+        System.out.println("Not using " + it.name)
+        it.tasks.generatePomFileForMavenJavaPublication.enabled = false
+        it.tasks.publishToMavenLocal.enabled = false
+        it.tasks.publish.enabled = false
+        it.tasks.publishMavenJavaPublicationToMavenLocal.enabled = false
+    }
 }
