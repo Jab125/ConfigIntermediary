@@ -1,14 +1,22 @@
-name: Build
-on: [push, pull_request]
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or Java versions, and provides a first line of defence
+# against bad commits.
+
+name: build
+on: [ pull_request, push ]
+
 jobs:
   build:
     strategy:
       matrix:
-        java: [17-jdk, 18-jdk]
-    runs-on: ubuntu-20.04
-    container:
-      image: eclipse-temurin:${{ matrix.java }}
-      options: --user root
+        # Use these Java versions
+        java: [
+            17    # Minimum supported by Minecraft
+        ]
+        # and run on both Linux and Windows
+        os: [ ubuntu-20.04, windows-latest ]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
