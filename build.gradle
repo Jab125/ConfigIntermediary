@@ -174,7 +174,7 @@ eruwkhgdf.dependencies {
 }
 
 void setupRepositories(RepositoryHandler repositories) {
-    repositories.mavenLocal() // uncomment for testing
+   // repositories.mavenLocal() // uncomment for testing
     def ENV = System.getenv()
     if (ENV.MAVEN_URL) {
         repositories.maven {
