@@ -3,12 +3,9 @@
   "id": "config-intermediary",
   "version": "${version}",
   "name": "Config Intermediary",
-  "description": "",
+  "description": "API for interacting with config libraries.",
   "authors": [
     "Jab125"
-  ],
-  "provides": [
-    "config-intermediary-auto-config-compat"
   ],
   "contact": {
   },
