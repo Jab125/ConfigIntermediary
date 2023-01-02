@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "config-intermediary-autoconfig",
+  "id": "config-intermediary-auto-config",
   "version": "${version}",
   "name": "CI Auto Config",
   "description": "",
