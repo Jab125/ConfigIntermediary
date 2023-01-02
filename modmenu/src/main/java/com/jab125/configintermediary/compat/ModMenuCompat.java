@@ -33,12 +33,12 @@ public class ModMenuCompat {
             }
 
             @Override
-            void onLoad(LoadEvent loadEvent) {
+            public void onLoad(LoadEvent loadEvent) {
                 // TODO
             }
 
             @Override
-            void onSave(SaveEvent saveEvent) {
+            public void onSave(SaveEvent saveEvent) {
                 // TODO
             }
 
@@ -48,7 +48,7 @@ public class ModMenuCompat {
             }
 
             @Override
-            void resetConfig() {
+            public void resetConfig() {
                 for (ConfigValue value : getFutureConfig().getAll().values()) {
                     value.resetToDefault();
                 }
@@ -70,7 +70,7 @@ public class ModMenuCompat {
             }
 
             @Override
-            String getId() {
+            public String getId() {
                 return "modmenu";
             }
         });
