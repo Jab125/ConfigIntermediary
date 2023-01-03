@@ -5,9 +5,11 @@ import com.jab125.configintermediary.api.event.LoadEvent;
 import com.jab125.configintermediary.api.event.SaveEvent;
 import com.jab125.configintermediary.api.value.*;
 import com.jab125.configintermediary.mixin.owoconfig.ConfigWrapperAccessor;
+import com.jab125.configintermediary.mixin.owoconfig.OptionAccessor;
 import com.jab125.configintermediary.util.ReflectionUtils;
 import io.wispforest.owo.config.ConfigWrapper;
 import io.wispforest.owo.config.Option;
+import io.wispforest.owo.config.annotation.RestartRequired;
 import io.wispforest.owo.util.NumberReflection;
 import net.minecraft.util.Identifier;
 
@@ -126,6 +128,11 @@ public class OwoConfigCompat {
                     }
 
                     @Override
+                    public boolean requiresGameRestart() {
+                        return ((OptionAccessor)(Object)option).getBackingField().hasAnnotation(RestartRequired.class);
+                    }
+
+                    @Override
                     public void set(int a, Object value) {
                         Array.set(get(), a, value);
                     }
@@ -196,6 +203,11 @@ public class OwoConfigCompat {
                     }
 
                     @Override
+                    public boolean requiresGameRestart() {
+                        return ((OptionAccessor)(Object)option).getBackingField().hasAnnotation(RestartRequired.class);
+                    }
+
+                    @Override
                     public void resetToDefault() {
                         set(getDefaultValue());
                     }
@@ -205,6 +217,11 @@ public class OwoConfigCompat {
                     @Override
                     public Object get() {
                         return option.value();
+                    }
+
+                    @Override
+                    public boolean requiresGameRestart() {
+                        return ((OptionAccessor)(Object)option).getBackingField().hasAnnotation(RestartRequired.class);
                     }
 
                     @Override

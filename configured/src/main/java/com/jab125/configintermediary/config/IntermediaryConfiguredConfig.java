@@ -18,11 +18,13 @@ public class IntermediaryConfiguredConfig implements ModInitializer {
     private static Properties properties;
     public static void load() throws IOException {
         properties = new Properties();
-        if (!FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.json").toFile().exists()) {
+        if (!FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties").toFile().exists()) {
+            FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties").toFile().getParentFile().mkdirs();
+            FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties").toFile().createNewFile();
             properties.setProperty("enabled", String.valueOf(false));
-            properties.store(Files.newBufferedWriter(FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.json")), "Whether to automatically load generate configured config screens.");
+            properties.store(Files.newBufferedWriter(FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties")), "Whether to automatically load generate configured config screens.");
         } else {
-            properties.load(Files.newBufferedReader(FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.json")));
+            properties.load(Files.newBufferedReader(FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties")));
         }
         if (properties.containsKey("enabled")) {
             try {
@@ -34,7 +36,7 @@ public class IntermediaryConfiguredConfig implements ModInitializer {
     }
 
     public static void save() throws IOException {
-        properties.store(Files.newBufferedWriter(FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.json")), "Whether to automatically load generate configured config screens.");
+        properties.store(Files.newBufferedWriter(FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties")), "Whether to automatically load generate configured config screens.");
     }
 
     @Override
@@ -107,7 +109,7 @@ public class IntermediaryConfiguredConfig implements ModInitializer {
             configBuilder.set("enabled", new ObjectConfigValue() {
                 @Override
                 public Object get() {
-                    return enabled;
+                    return Boolean.parseBoolean(properties.getProperty("enabled"));
                 }
 
                 @Override
@@ -118,18 +120,21 @@ public class IntermediaryConfiguredConfig implements ModInitializer {
                 @Override
                 public void resetToDefault() {
                     properties.setProperty("enabled", "false");
-                    enabled = false;
                 }
 
                 @Override
                 public void set(Object value) {
                     properties.setProperty("enabled", String.valueOf(value));
-                    enabled = (Boolean) value;
                 }
 
                 @Override
                 public Class<?> getType() {
                     return boolean.class;
+                }
+
+                @Override
+                public boolean requiresGameRestart() {
+                    return true;
                 }
             });
             var l = configBuilder.build();

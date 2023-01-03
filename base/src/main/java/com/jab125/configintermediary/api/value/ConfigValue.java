@@ -19,6 +19,10 @@ public abstract class ConfigValue {
         return (V) get();
     }
 
+    public boolean requiresGameRestart() {
+        return false;
+    }
+
     @Override
     public String toString() {
         if (get().getClass().isArray()) {

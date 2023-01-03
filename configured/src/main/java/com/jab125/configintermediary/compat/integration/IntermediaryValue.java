@@ -90,7 +90,7 @@ public class IntermediaryValue<T> implements IConfigValue<T> {
 
     @Override
     public boolean requiresGameRestart() {
-        return false;
+        return configValue.requiresGameRestart();
     }
 
     public static <V> V lastValue(List<V> list, V defaultValue) {
