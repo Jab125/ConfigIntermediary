@@ -1,6 +1,10 @@
 package com.jab125.configintermediary.api.value;
 
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public abstract class ConfigValue {
@@ -21,6 +25,10 @@ public abstract class ConfigValue {
 
     public boolean requiresGameRestart() {
         return false;
+    }
+
+    public @Nullable Text getComment() {
+        return null;
     }
 
     @Override

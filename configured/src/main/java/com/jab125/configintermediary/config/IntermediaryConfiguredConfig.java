@@ -8,6 +8,7 @@ import com.jab125.configintermediary.api.value.ObjectConfigValue;
 import com.jab125.configintermediary.compat.TransitiveConfigValueBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.text.Text;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -135,6 +136,11 @@ public class IntermediaryConfiguredConfig implements ModInitializer {
                 @Override
                 public boolean requiresGameRestart() {
                     return true;
+                }
+
+                @Override
+                public Text getComment() {
+                    return Text.literal("Whether to generate configuration screens via Configured.");
                 }
             });
             var l = configBuilder.build();

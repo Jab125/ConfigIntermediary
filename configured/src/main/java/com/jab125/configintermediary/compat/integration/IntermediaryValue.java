@@ -60,6 +60,8 @@ public class IntermediaryValue<T> implements IConfigValue<T> {
 
     @Override
     public Text getComment() {
+        if (configValue.getComment() != null)
+        return configValue.getComment();
         return null;
     }
 
