@@ -15,8 +15,10 @@ import java.nio.file.Files;
 import java.util.Properties;
 
 public class IntermediaryConfiguredConfig implements ModInitializer {
+    public static boolean forceConfiguredMenu = false;
     public static boolean enabled = false;
     private static Properties properties;
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void load() throws IOException {
         properties = new Properties();
         if (!FabricLoader.getInstance().getConfigDir().resolve("intermediary-config/configured.properties").toFile().exists()) {

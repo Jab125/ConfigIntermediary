@@ -4,4 +4,7 @@ repositories {
 }
 dependencies {
     modImplementation "curse.maven:configured-667378:4166864"
+    modApi "com.terraformersmc:modmenu:5.0.2", {
+        exclude module: "fabric-api"
+    }
 }
