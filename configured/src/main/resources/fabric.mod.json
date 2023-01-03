@@ -14,7 +14,8 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.jab125.configintermediary.compat.integration.IntermediaryIntegration"
+      "com.jab125.configintermediary.compat.integration.IntermediaryIntegration",
+      "com.jab125.configintermediary.config.IntermediaryConfiguredConfig"
     ],
     "config-intermediary:registration": [
       "com.jab125.configintermediary.compat.integration.IntermediaryIntegration"

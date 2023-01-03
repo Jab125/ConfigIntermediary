@@ -1,18 +1,16 @@
 package com.jab125.configintermediary.compat.integration;
 
-import com.google.common.collect.ImmutableMap;
-import com.jab125.configintermediary.ConfigIntermediary;
 import com.jab125.configintermediary.api.entrypoint.ConfigRegistration;
 import com.jab125.configintermediary.api.value.Config;
-import com.jab125.configintermediary.compat.integration.IntermediaryConfig;
 import com.mrcrayfish.configured.api.IModConfig;
 import com.mrcrayfish.configured.client.ClientHandler;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static com.jab125.configintermediary.config.IntermediaryConfiguredConfig.enabled;
 
 public class IntermediaryIntegration implements ModInitializer, ConfigRegistration {
     private static final Map<String, Set<IModConfig>> configs = new HashMap<>();
@@ -23,6 +21,6 @@ public class IntermediaryIntegration implements ModInitializer, ConfigRegistrati
 
     @Override
     public void onInitialize() {
-        ClientHandler.getProviders().add(modContainer -> configs.getOrDefault(modContainer.getMetadata().getId(), Set.of()));
+        ClientHandler.getProviders().add(modContainer -> !enabled ? Set.of() : configs.getOrDefault(modContainer.getMetadata().getId(), Set.of()));
     }
 }
