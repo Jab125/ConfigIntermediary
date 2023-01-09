@@ -1,6 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
+  "plugin": "com.jab125.configintermediary.configured.Plugin",
   "package": "com.jab125.configintermediary.mixin.configured",
   "compatibilityLevel": "JAVA_17",
   "injectors": {

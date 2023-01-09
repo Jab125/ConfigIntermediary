@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "config-intermediary-owo-config-testmod",
+  "version": "1.0.0",
+  "name": "Config Intermediary oωo Config Test Mod",
+  "description": "",
+  "authors": [
+    "Jab125"
+  ],
+  "contact": {
+  },
+  "license": "Apache-2.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jab125.configintermediary.test.OwoConfigTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+  }
+}

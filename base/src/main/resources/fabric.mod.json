@@ -32,7 +32,8 @@
   "suggests": {
   },
   "custom": {
-    "config-intermediary:compat": [
-    ]
+    "config-intermediary": {
+      "builtin": true
+    }
   }
 }

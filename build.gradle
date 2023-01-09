@@ -1,21 +1,69 @@
-plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
-    id 'maven-publish'
+
+
+buildscript {
+    dependencies {
+        classpath 'org.kohsuke:github-api:1.135'
+    }
 }
 
-version = "0.1.0"
-archivesBaseName = "config-intermediary"
+plugins {
+    id "java-library"
+    id "eclipse"
+    id "idea"
+    id "maven-publish"
+    id "fabric-loom" version "1.0-SNAPSHOT" apply false
+    id "org.cadixdev.licenser" version "0.6.1"
+    id "org.ajoberstar.grgit" version "3.1.0"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.modrinth.minotaur" version "1.1.0"
+}
+
+def ENV = System.getenv()
+
+version = project.version
+
+import org.apache.commons.codec.digest.DigestUtils
+
+def getSubprojectVersion(project) {
+    // Get the version from the gradle.properties file
+    def version = project.properties["${project.name}-version"]
+
+    if (!version) {
+        throw new NullPointerException("Could not find version for " + project.name)
+    }
+
+    return version
+}
+
+def moduleDependencies(project, List<String> depNames) {
+    def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
+    project.dependencies {
+        deps.each {
+            api it
+        }
+    }
+}
+subprojects {
+    version = getSubprojectVersion(project)
+}
+
 allprojects {
-    apply plugin: 'fabric-loom'
+    apply plugin: "java-library"
     apply plugin: "maven-publish"
-    version = rootProject.version
-    group = rootProject.maven_group
+    apply plugin: "fabric-loom"
 
     repositories {
         maven { url "https://maven.shedaniel.me/" }
         maven { url "https://maven.terraformersmc.com/releases/" }
         maven { url 'https://maven.wispforest.io' }
+        maven { url = "https://cursemaven.com/"}
     }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
+
+    group = "com.jab125.config-intermediary"
 
     sourceSets {
         testmod {
@@ -23,6 +71,7 @@ allprojects {
             runtimeClasspath += main.runtimeClasspath
         }
     }
+
     loom {
         runtimeOnlyLog4j = true
 
@@ -43,149 +92,63 @@ allprojects {
     }
 
     dependencies {
-        // To change the versions see the gradle.properties file
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "com.mojang:minecraft:$rootProject.minecraft_version"
         mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
-        modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
-
-        // Fabric API. This is technically optional, but you probably want it anyway.
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
-//        modApi "me.shedaniel.cloth:cloth-config-fabric:9.0.94", {
-//            exclude(group: "net.fabricmc.fabric-api")
-//        }
-//        testmodImplementation "com.terraformersmc:modmenu:5.0.2", {
-//            exclude module: "fabric-api"
-//        }
+        modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     }
 
-    def targetJavaVersion = 17
-    tasks.withType(JavaCompile).configureEach {
-        // ensure that the encoding is set to UTF-8, no matter what the system default is
-        // this fixes some edge cases with special characters not displaying correctly
-        // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-        // If Javadoc is generated, this must be specified in that task too.
-        it.options.encoding = "UTF-8"
-        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-            it.options.release = targetJavaVersion
+    repositories {
+        mavenLocal()
+    }
+
+    processResources {
+        inputs.property "version", project.version
+
+        filesMatching("fabric.mod.json") {
+            expand "version": project.version, "baseVersion": rootProject.properties["base-version"]
         }
     }
 
     java {
-        def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-        if (JavaVersion.current() < javaVersion) {
-            toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-        }
-//        archivesBaseName = project.archivesBaseName + "-" + rootProject.version
-        // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-        // if it is present.
-        // If you remove this line, sources will not be generated.
         withSourcesJar()
     }
 
-    jar {
-        from("LICENSE") {
-            rename { "${it}_${project.archivesBaseName}" }
-        }
+    tasks.withType(AbstractArchiveTask) {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
     }
 
-    processResources {
-        inputs.property "version", rootProject.version
-        filteringCharset "UTF-8"
-
-        filesMatching("fabric.mod.json") {
-            expand "version": rootProject.version
-        }
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
     }
-}
-
-subprojects.each {
-    System.out.println(it.name)
-    if (it.name != "base")
-        it.dependencies {
-            api project(path: ":base", configuration: "namedElements")
-        }
 }
 
 subprojects {
+    dependencies {
+        testmodImplementation sourceSets.main.output
+        if (project.name != "base") {
+            api project(path: ':base', configuration: 'namedElements')
+        }
+    }
 
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                System.out.println(groupId)
-                artifact(remapJar) {
-                    builtBy remapJar
-                }
-                artifact(sourcesJar) {
-                    builtBy remapSourcesJar
-                }
-//                groupId 'com.jab125.config-intermediary'
-//                artifactId project.name
-//                version '1.0.0'
-//                from components.java
+                from components.java
             }
         }
 
         setupRepositories(repositories)
     }
-}
 
-repositories {
-    maven { url 'https://maven.wispforest.io' }
-}
-repositories {
-    maven { url = "https://cursemaven.com/"}
-}
-dependencies {
-    modRuntimeOnly "curse.maven:configured-667378:4166864"
-    runtimeOnly ('com.electronwill.night-config:core:3.6.0')
-    runtimeOnly ('com.electronwill.night-config:toml:3.6.0')
-    modRuntimeOnly "io.wispforest:owo-lib:0.9.3+1.19.3", {
-        exclude module: "fabric-api"
-    }
-    // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
-    modApi "com.terraformersmc:modmenu:5.0.2", {
-        exclude module: "fabric-api"
-    }
-}
+    javadoc.enabled = false
 
-dependencies {
     afterEvaluate {
-        subprojects.each {
-            if (it.name == "modTestmod") return ;
-            api project(path: "${it.path}", configuration: "namedElements")
-            System.out.println(it.archivesBaseName)
-            if (!it.archivesBaseName.toLowerCase(Locale.US).contains("test")) {
-                include(project(path: "${it.path}", configuration: "namedElements"))
-            }
-            // testmodImplementation (project("${it.path}:").sourceSets.main.output)
-        }
-    }
-}
-
-def eruwkhgdf = getSubprojects().stream().filter(p -> p.toString().equals("project ':modTestmod'")).findFirst().get()
-eruwkhgdf.dependencies {
-    afterEvaluate {
-        rootProject.subprojects.each {
-            if (!it == eruwkhgdf)
-                api project(path: "${it.path}", configuration: "namedElements")
-        }
-    }
-}
-
-void setupRepositories(RepositoryHandler repositories) {
-   // repositories.mavenLocal() // uncomment for testing
-    def ENV = System.getenv()
-    if (ENV.MAVEN_URL) {
-        repositories.maven {
-            url ENV.MAVEN_URL
-            if (ENV.MAVEN_USERNAME) {
-                credentials {
-                    username ENV.MAVEN_USERNAME
-                    password ENV.MAVEN_PASSWORD
-                }
-            }
-        }
+        // Disable the gen sources task on sub projects
+        genSourcesWithFernFlower.enabled = false
+        genSourcesWithCfr.enabled = false
+        unpickJar.enabled = false
     }
 }
 
@@ -203,13 +166,11 @@ publishing {
             pom.withXml {
                 def depsNode = asNode().appendNode("dependencies")
                 subprojects.each {
-                    if (it.name != "modTestmod") {
-                        def depNode = depsNode.appendNode("dependency")
-                        depNode.appendNode("groupId", it.group)
-                        depNode.appendNode("artifactId", it.name)
-                        depNode.appendNode("version", it.version)
-                        depNode.appendNode("scope", "compile")
-                    }
+                    def depNode = depsNode.appendNode("dependency")
+                    depNode.appendNode("groupId", it.group)
+                    depNode.appendNode("artifactId", it.name)
+                    depNode.appendNode("version", it.version)
+                    depNode.appendNode("scope", "compile")
                 }
             }
         }
@@ -217,13 +178,143 @@ publishing {
 
     setupRepositories(repositories)
 }
+loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
 
-allprojects {
-    if (it.name == "modTestmod") {
-        System.out.println("Not using " + it.name)
-        it.tasks.generatePomFileForMavenJavaPublication.enabled = false
-        it.tasks.publishToMavenLocal.enabled = false
-        it.tasks.publish.enabled = false
-        it.tasks.publishMavenJavaPublicationToMavenLocal.enabled = false
+// Required until the deprecation is removed. Fabric API's main jar that is published to maven does not contain sub modules.
+loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
+
+void setupRepositories(RepositoryHandler repositories) {
+    //repositories.mavenLocal() // uncomment for testing
+    def ENV = System.getenv()
+    if (ENV.MAVEN_URL) {
+        repositories.maven {
+            url ENV.MAVEN_URL
+            if (ENV.MAVEN_USERNAME) {
+                credentials {
+                    username ENV.MAVEN_USERNAME
+                    password ENV.MAVEN_PASSWORD
+                }
+            }
+        }
     }
 }
+
+subprojects.each { remapJar.dependsOn("${it.path}:remapJar") }
+
+sourceSets {
+    testmod
+}
+
+// These modules are not included in the fat jar, maven will resolve them via the pom.
+def devOnlyModules = [
+
+]
+
+dependencies {
+    modLocalRuntime "io.wispforest:owo-lib:0.9.3+1.19.3"
+    modLocalRuntime "com.terraformersmc:modmenu:5.0.2", {
+        exclude module: "fabric-api"
+    }
+    modLocalRuntime "curse.maven:configured-667378:4166864"
+
+    modLocalRuntime 'com.electronwill.night-config:core:3.6.0'
+    modLocalRuntime 'com.electronwill.night-config:toml:3.6.0'
+    afterEvaluate {
+        subprojects.each {
+            api project(path: ":${it.name}", configuration: "namedElements")
+
+            if (!(it.name in devOnlyModules)) {
+                include project("${it.name}:")
+            }
+
+            testmodImplementation project("${it.name}:").sourceSets.testmod.output
+        }
+    }
+}
+
+curseforge {
+    if (ENV.CURSEFORGE_API_KEY) {
+        apiKey = ENV.CURSEFORGE_API_KEY
+    }
+
+    project {
+        id = "785412"
+        changelog = ENV.CHANGELOG ?: "No changelog provided"
+        releaseType = project.prerelease == "true" ? "beta" : "release"
+        addGameVersion "1.19.3"
+        addGameVersion "Fabric"
+        addGameVersion "Java 17"
+        addGameVersion "Client"
+        addGameVersion "Server"
+
+        mainArtifact(remapJar) {
+            displayName = "Config Intermediary $project.version for $project.minecraft_version"
+        }
+
+        afterEvaluate {
+            uploadTask.dependsOn("remapJar")
+        }
+    }
+
+    options {
+        forgeGradleIntegration = false
+    }
+}
+
+import org.kohsuke.github.GHReleaseBuilder
+import org.kohsuke.github.GitHub
+
+task github(dependsOn: remapJar) {
+    onlyIf {
+        ENV.GITHUB_TOKEN
+    }
+
+    doLast {
+        def github = GitHub.connectUsingOAuth(ENV.GITHUB_TOKEN as String)
+        def repository = github.getRepository(ENV.GITHUB_REPOSITORY)
+
+        def releaseBuilder = new GHReleaseBuilder(repository, version as String)
+        releaseBuilder.name("Config Intermediary $project.version for $project.minecraft_version")
+        releaseBuilder.body(ENV.CHANGELOG ?: "No changelog provided")
+        releaseBuilder.commitish(getBranch())
+        releaseBuilder.prerelease(project.prerelease == "true")
+
+        def ghRelease = releaseBuilder.create()
+        ghRelease.uploadAsset(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"), "application/java-archive");
+    }
+}
+
+task modrinth(type: com.modrinth.minotaur.TaskModrinthUpload, dependsOn: remapJar) {
+    onlyIf {
+        ENV.MODRINTH_TOKEN
+    }
+
+    token = ENV.MODRINTH_TOKEN
+    projectId = "4bwnHR8S"
+    versionNumber = version
+    versionName = "Config Intermediary $project.version for $project.minecraft_version"
+    releaseType = project.prerelease == "true" ? "beta" : "release"
+    changelog = ENV.CHANGELOG ?: "No changelog provided"
+
+    uploadFile = remapJar
+
+    addGameVersion(project.minecraft_version)
+    addLoader('fabric')
+}
+
+// A task to ensure that the version being released has not already been released.
+task checkVersion {
+    doFirst {
+        def xml = new URL("https://maven.jab125.dev/com/jab125/config-intermediary/config-intermediary/maven-metadata.xml").text
+        def metadata = new XmlSlurper().parseText(xml)
+        def versions = metadata.versioning.versions.version*.text();
+        if (versions.contains(version)) {
+            throw new RuntimeException("${version} has already been released!")
+        }
+    }
+}
+
+github.mustRunAfter checkVersion
+modrinth.mustRunAfter checkVersion
+publish.mustRunAfter checkVersion
+project.tasks.curseforge.mustRunAfter checkVersion

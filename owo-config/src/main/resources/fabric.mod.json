@@ -20,13 +20,16 @@
     "fabric": "*",
     "minecraft": "1.19.3",
     "java": ">=17",
-    "config-intermediary-base": ">=${version}"
+    "config-intermediary-base": ">=${baseVersion}"
   },
   "suggests": {
   },
   "custom": {
-    "config-intermediary:compat": [
-      "owo-config"
-    ]
+    "config-intermediary": {
+      "builtin": true,
+      "config": {
+        "owo": ["owo-config"]
+      }
+    }
   }
 }

@@ -12,7 +12,6 @@ rootProject.name = "config-intermediary"
 
 include "modmenu"
 include "auto-config"
-include "modTestmod"
 include "owo-config"
 include "configured"
 include "base"
