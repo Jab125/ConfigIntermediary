@@ -8,4 +8,5 @@ dependencies {
     modImplementation "io.wispforest:owo-lib:0.9.3+1.19.3"
     testmodRuntimeOnly project(path: ":configured", configuration: "namedElements")
     testmodAnnotationProcessor "io.wispforest:owo-lib:0.9.3+1.19.3"
+    modTestmodImplementation "io.wispforest:owo-lib:0.9.3+1.19.3"
 }
