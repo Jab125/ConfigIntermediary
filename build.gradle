@@ -89,6 +89,7 @@ allprojects {
                 source sourceSets.testmod
             }
         }
+        createRemapConfigurations(sourceSets.testmod)
     }
 
     dependencies {
@@ -211,14 +212,13 @@ def devOnlyModules = [
 ]
 
 dependencies {
-    modLocalRuntime "io.wispforest:owo-lib:0.9.3+1.19.3"
-    modLocalRuntime "com.terraformersmc:modmenu:5.0.2", {
+    modTestmodRuntimeOnly "com.terraformersmc:modmenu:5.0.2", {
         exclude module: "fabric-api"
     }
-    modLocalRuntime "curse.maven:configured-667378:4166864"
-
-    modLocalRuntime 'com.electronwill.night-config:core:3.6.0'
-    modLocalRuntime 'com.electronwill.night-config:toml:3.6.0'
+    modTestmodRuntimeOnly "io.wispforest:owo-lib:0.9.3+1.19.3"
+    modTestmodRuntimeOnly "curse.maven:configured-667378:4166864"
+    modTestmodRuntimeOnly 'com.electronwill.night-config:core:3.6.0'
+    modTestmodRuntimeOnly 'com.electronwill.night-config:toml:3.6.0'
     afterEvaluate {
         subprojects.each {
             api project(path: ":${it.name}", configuration: "namedElements")
