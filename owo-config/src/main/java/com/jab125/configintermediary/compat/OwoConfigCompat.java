@@ -77,6 +77,13 @@ public class OwoConfigCompat {
             }
 
             @Override
+            public String getFileName() {
+                var q = wrapper.fileLocation().toFile().getName().split("/");
+                if (q.length == 0) return getId();
+                return q[q.length-1];
+            }
+
+            @Override
             public Object getAsDefault() {
                 try {
                     return configClass.getConstructor().newInstance();

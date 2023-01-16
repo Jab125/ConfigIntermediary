@@ -47,12 +47,17 @@ public class IntermediaryConfig implements IModConfig {
 
     @Override
     public ConfigType getType() {
-        return ConfigType.UNIVERSAL;
+        return switch (config.getConfigType()) {
+            case COMMON -> ConfigType.UNIVERSAL;
+            case CLIENT -> ConfigType.CLIENT;
+            case SERVER -> ConfigType.SERVER;
+        };
+        //return ConfigType.UNIVERSAL;
     }
 
     @Override
     public String getFileName() {
-        return FabricLoader.getInstance().getModContainer(getModId()).isPresent() ? FabricLoader.getInstance().getModContainer(getModId()).get().getMetadata().getName() : getModId();
+        return config.getFileName() != null ? config.getFileName() : FabricLoader.getInstance().getModContainer(getModId()).isPresent() ? FabricLoader.getInstance().getModContainer(getModId()).get().getMetadata().getName() : getModId();
     }
 
     @Override
@@ -68,6 +73,10 @@ public class IntermediaryConfig implements IModConfig {
     @Override
     public String getModId() {
         return id;
+    }
+
+    public String getTranslationKey() {
+        return String.format("intermediary.%s", this.id);
     }
 
     @Override
@@ -88,6 +97,6 @@ public class IntermediaryConfig implements IModConfig {
 
     @Override
     public boolean isReadOnly() {
-        return false;
+        return config.getConfigType().equals(com.jab125.configintermediary.api.ConfigType.SERVER);
     }
 }

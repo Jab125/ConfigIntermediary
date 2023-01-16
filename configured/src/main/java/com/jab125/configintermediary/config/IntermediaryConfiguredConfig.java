@@ -108,6 +108,11 @@ public class IntermediaryConfiguredConfig implements ModInitializer {
                     properties.setProperty("enabled", "false");
                     enabled = false;
                 }
+
+                @Override
+                public String getFileName() {
+                    return "configured.properties";
+                }
             });
             configBuilder.set("enabled", new ObjectConfigValue() {
                 @Override

@@ -55,6 +55,11 @@ public class ModMenuCompat {
             }
 
             @Override
+            public String getFileName() {
+                return "modmenu.json";
+            }
+
+            @Override
             public Object get() {
                 return null; // static
             }

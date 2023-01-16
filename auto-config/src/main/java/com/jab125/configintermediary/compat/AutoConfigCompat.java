@@ -10,6 +10,7 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.ConfigManager;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.autoconfig.serializer.ConfigSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -128,6 +129,21 @@ public class AutoConfigCompat {
             public String getId() {
                 return modId;
             }
+
+            @Override
+            public String getFileName() {
+                return getFileName(configManager.getSerializer());
+            }
+
+            private String getFileName(ConfigSerializer serializer) {
+                try {
+                    var q = serializer.getClass().getDeclaredMethod("getConfigPath");
+                    q.setAccessible(true);
+                    return (String) q.invoke(serializer);
+                } catch (Exception e) {
+                    return getId();
+                }
+            }
         });
         for (Field field : defaultObject.getClass().getFields()) {
             if (Modifier.isStatic(field.getModifiers())) continue;
@@ -196,6 +212,21 @@ public class AutoConfigCompat {
             @Override
             public String getId() {
                 return modId;
+            }
+
+            @Override
+            public String getFileName() {
+                return getFileName(configManager.getSerializer());
+            }
+
+            private String getFileName(ConfigSerializer serializer) {
+                try {
+                    var q = serializer.getClass().getDeclaredMethod("getConfigPath");
+                    q.setAccessible(true);
+                    return (String) q.invoke(serializer);
+                } catch (Exception e) {
+                    return getId();
+                }
             }
         });
         for (Field field : config.getClass().getFields()) {

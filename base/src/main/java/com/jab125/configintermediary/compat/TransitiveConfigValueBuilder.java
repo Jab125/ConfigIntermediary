@@ -108,6 +108,8 @@ public class TransitiveConfigValueBuilder {
         public void resetConfig() {
             set(getAsDefault());
         }
+
+        public abstract String getFileName();
     }
 
     public static class ConfigBuilder extends TransitiveConfigValueBuilder {
@@ -181,6 +183,11 @@ public class TransitiveConfigValueBuilder {
                 @Override
                 public String getId() {
                     return ((ConfigDelegate) delegate).getId();
+                }
+
+                @Override
+                public String getFileName() {
+                    return ((ConfigDelegate) delegate).getFileName();
                 }
 
                 @Override
