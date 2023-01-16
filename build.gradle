@@ -76,14 +76,15 @@ allprojects {
         runtimeOnlyLog4j = true
 
         runs {
+            var q = it
             testmodClient {
-                client()
+                inherit(q.getByName("client"))
                 ideConfigGenerated project.rootProject == project
                 name = "Testmod Client"
                 source sourceSets.testmod
             }
             testmodServer {
-                server()
+                inherit(q.getByName("server"))
                 ideConfigGenerated project.rootProject == project
                 name = "Testmod Server"
                 source sourceSets.testmod
@@ -95,7 +96,7 @@ allprojects {
     dependencies {
         minecraft "com.mojang:minecraft:$rootProject.minecraft_version"
         mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
-        modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     }
 
@@ -212,10 +213,13 @@ def devOnlyModules = [
 ]
 
 dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modTestmodRuntimeOnly "com.terraformersmc:modmenu:5.0.2", {
         exclude module: "fabric-api"
     }
-    modTestmodRuntimeOnly "io.wispforest:owo-lib:0.9.3+1.19.3"
+    modTestmodRuntimeOnly "io.wispforest:owo-lib:0.9.3+1.19.3", {
+        exclude module: "fabric-loader"
+    }
     modTestmodRuntimeOnly "curse.maven:configured-667378:4166864"
     modTestmodRuntimeOnly 'com.electronwill.night-config:core:3.6.0'
     modTestmodRuntimeOnly 'com.electronwill.night-config:toml:3.6.0'

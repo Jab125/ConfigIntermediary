@@ -5,8 +5,14 @@ repositories {
 
 dependencies {
     mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
-    modImplementation "io.wispforest:owo-lib:0.9.3+1.19.3"
+    modImplementation "io.wispforest:owo-lib:0.9.3+1.19.3", {
+        exclude module: "fabric-loader"
+    }
     testmodRuntimeOnly project(path: ":configured", configuration: "namedElements")
-    testmodAnnotationProcessor "io.wispforest:owo-lib:0.9.3+1.19.3"
-    modTestmodImplementation "io.wispforest:owo-lib:0.9.3+1.19.3"
+    testmodAnnotationProcessor "io.wispforest:owo-lib:0.9.3+1.19.3", {
+        exclude module: "fabric-loader"
+    }
+    modTestmodImplementation "io.wispforest:owo-lib:0.9.3+1.19.3", {
+        exclude module: "fabric-loader"
+    }
 }
